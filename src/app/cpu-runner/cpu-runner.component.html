@@ -11,6 +11,10 @@
     <app-cpu-component class="component" identifier="MBR"
       >MBR</app-cpu-component
     >
+
+    <app-registers-bank class="component"
+      ><p>Banco de registros</p></app-registers-bank
+    >
   </section>
 
   <section class="bus-section">
@@ -26,6 +30,6 @@
   </section>
 
   <app-principal-memory [initialInstructions]="instructions()"
-    ><h2>Memoria principal</h2></app-principal-memory
+    ><p>Memoria principal</p></app-principal-memory
   >
 </main>

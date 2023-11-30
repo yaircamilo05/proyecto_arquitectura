@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  Input,
   WritableSignal,
   signal,
 } from '@angular/core';
@@ -35,23 +36,13 @@ export class PrincipalMemoryComponent extends CpuComponentComponent {
   ) {
     super(cpuRunnerService);
 
-    this.identifier = 'PRINCIPAL-MEMORY';
     this.instructions = signal([]);
+    this.identifier = 'PRINCIPAL-MEMORY';
   }
 
-  override setContent(): void {
-    const content = this.cpuRunnerService.selectedCpuComponentContent();
-
-    if (this.isArray(content)) {
-      this.instructions.set(content as string[]);
-      this.content.set(content);
-      this.principalMemoryService.instructions = content as string[];
-
-      this.cpuRunnerService.resetContent();
-    }
-  }
-
-  isArray(content: string | string[] | number | null) {
-    return Array.isArray(content);
+  @Input()
+  set initialInstructions(value: string[]) {
+    this.instructions.set(value);
+    this.principalMemoryService.instructions = value;
   }
 }

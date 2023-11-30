@@ -1,0 +1,12 @@
+div {
+  background-color: rgb(223, 223, 223);
+  min-height: 400px;
+}
+
+.selected {
+  border: 2px solid blue;
+}
+
+span {
+  display: block;
+}

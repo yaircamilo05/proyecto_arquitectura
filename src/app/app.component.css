@@ -1,0 +1,11 @@
+* {
+  font-family: "Arial";
+}
+
+div {
+  padding: 50px 0;
+}
+
+textarea {
+  width: 100%;
+}

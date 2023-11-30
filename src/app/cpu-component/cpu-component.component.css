@@ -1,0 +1,13 @@
+.cpu-component {
+  border: 1px solid red;
+  display: flex;
+  padding: 30px 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.cpu-component.selected {
+  border: 2px solid blue;
+}

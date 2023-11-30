@@ -1,0 +1,9 @@
+<section>
+  <div class="registers">
+    @for (register of registers() | keyvalue; track $index) {
+    <span>{{ register.key }}: {{ register.value }}</span>
+    }
+  </div>
+
+  <ng-content></ng-content>
+</section>

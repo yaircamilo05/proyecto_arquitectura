@@ -1,0 +1,14 @@
+section {
+  display: flex;
+  justify-content: space-evenly;
+  border: 1px solid red;
+  align-items: center;
+  padding: 10px;
+}
+
+.registers {
+  display: grid;
+  width: 60%;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+}

@@ -8,6 +8,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { RegistersBankService } from './services/registers-bank.service';
 
 interface InstructionsForm {
   instructions: FormControl<string>;
@@ -23,6 +24,7 @@ export class AppComponent {
   constructor(
     private cpuRunnerService: CpuRunnerService,
     private principalMemoryService: PrincipalMemoryService,
+    private registersBankService: RegistersBankService,
     private fb: FormBuilder
   ) {
     this.instructionsForm = new FormGroup({

@@ -1,0 +1,7 @@
+<div class="cpu-component" [ngClass]="{ selected: componentIsSelected() }">
+  <ng-content></ng-content>
+
+  @if (content() !== null) {
+  <p>{{ content() }}</p>
+  }
+</div>

@@ -60,10 +60,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "arquitectura-project:build:production"
+              "buildTarget": "arquitectura-project:build:production"
             },
             "development": {
-              "browserTarget": "arquitectura-project:build:development"
+              "buildTarget": "arquitectura-project:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -71,7 +71,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "arquitectura-project:build"
+            "buildTarget": "arquitectura-project:build"
           }
         },
         "test": {
@@ -94,5 +94,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "5a140166-5c57-488c-8301-b6badf91529a"
   }
 }

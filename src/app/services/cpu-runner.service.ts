@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class CpuRunnerService {
   selectedCpuComponent = new BehaviorSubject<CpuComponentType | null>(null);
-  selectedCpuComponentContent = signal<string | number | null>(null);
+  selectedCpuComponentContent = signal<string | string[] | number | null>(null);
 
   selectComponent(component: CpuComponentType) {
     this.selectedCpuComponent.next(component);
@@ -15,7 +15,7 @@ export class CpuRunnerService {
 
   selectComponentWitContent(
     component: CpuComponentType,
-    content: string | number
+    content: string | string[] | number
   ) {
     this.selectedCpuComponentContent.set(content);
     this.selectedCpuComponent.next(component);

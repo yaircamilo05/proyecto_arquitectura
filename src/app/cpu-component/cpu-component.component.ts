@@ -31,11 +31,11 @@ export class CpuComponentComponent implements OnInit, OnDestroy {
   identifier?: CpuComponentType;
 
   componentIsSelected: WritableSignal<boolean>;
-  content: WritableSignal<string | number | null>;
+  content: WritableSignal<string | string[] | number | null>;
 
   subscriptions: Subscription;
 
-  constructor(private cpuRunnerService: CpuRunnerService) {
+  constructor(protected cpuRunnerService: CpuRunnerService) {
     this.componentIsSelected = signal(false);
     this.content = signal(null);
 
@@ -43,7 +43,7 @@ export class CpuComponentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.identifier === 'IR' || this.identifier === 'MAR') {
+    if (this.identifier === 'PC' || this.identifier === 'MAR') {
       this.content.set(1);
     }
 
@@ -71,7 +71,6 @@ export class CpuComponentComponent implements OnInit, OnDestroy {
       this.content.update((value) => (value as number) + number);
 
       this.cpuRunnerService.resetContent();
-
       return;
     }
 

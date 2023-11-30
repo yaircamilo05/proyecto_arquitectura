@@ -8,4 +8,5 @@ export type CpuComponentType =
   | 'UC'
   | 'ALU'
   | 'IR'
+  | 'PRINCIPAL-MEMORY'
   | 'REGISTERS-BANK';

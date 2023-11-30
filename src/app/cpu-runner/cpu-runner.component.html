@@ -1,4 +1,29 @@
 <main>
-  <app-cpu-component identifier="UC">Unidad de Control</app-cpu-component>
-  <app-cpu-component identifier="MAR">MAR</app-cpu-component>
+  <section class="cpu-section">
+    <app-cpu-component class="component" identifier="PC">PC</app-cpu-component>
+    <app-cpu-component class="component" identifier="MAR"
+      >MAR</app-cpu-component
+    >
+
+    <app-cpu-component class="component" identifier="UC">UC</app-cpu-component>
+
+    <app-cpu-component class="component" identifier="IR">IR</app-cpu-component>
+    <app-cpu-component class="component" identifier="MBR"
+      >MBR</app-cpu-component
+    >
+  </section>
+
+  <section class="bus-section">
+    <app-cpu-component class="component" identifier="DIRECTIONS-BUS"
+      >Bus de direcciones</app-cpu-component
+    >
+    <app-cpu-component class="component" identifier="DATA-BUS"
+      >Bus de datos</app-cpu-component
+    >
+    <app-cpu-component class="component" identifier="CONTROL-BUS"
+      >Bus de control</app-cpu-component
+    >
+  </section>
+
+  <app-principal-memory><h2>Memoria principal</h2></app-principal-memory>
 </main>

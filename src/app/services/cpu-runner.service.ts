@@ -9,8 +9,14 @@ export class CpuRunnerService {
   selectedCpuComponent = new BehaviorSubject<CpuComponentType | null>(null);
   selectedCpuComponentContent = signal<string | string[] | number | null>(null);
 
+  initialInstructions$ = new BehaviorSubject<string[]>([]);
+
   selectComponent(component: CpuComponentType) {
     this.selectedCpuComponent.next(component);
+  }
+
+  set initialInstructions(value: string[]) {
+    this.initialInstructions$.next(value);
   }
 
   selectComponentWitContent(

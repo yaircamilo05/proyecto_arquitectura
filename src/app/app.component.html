@@ -1,10 +1,7 @@
-<app-cpu-runner></app-cpu-runner>
-
-<button (click)="selectCpuComponent('UC')">UC</button>
-<button (click)="selectCpuComponent('MAR', 1)">MAR</button>
-
-<button (click)="selectCpuComponent('PRINCIPAL-MEMORY', ['LOAD 1', 'LOAD 2'])">
-  select
-</button>
-
-<button (click)="getLastElement()">het</button>
+<div>
+  <form [formGroup]="instructionsForm" (submit)="executeInstructions()">
+    <textarea formControlName="instructions" pInputTextarea></textarea>
+    <p-button type="submit">Ejecutar ordenes</p-button>
+  </form>
+  <app-cpu-runner></app-cpu-runner>
+</div>

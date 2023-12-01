@@ -42,7 +42,7 @@ export class AppComponent {
 
   executeInstructions() {
     const instructionsValue = this.instructionsForm.controls.instructions.value;
-    const instructions = instructionsValue.split(',');
+    const instructions = instructionsValue.split(';');
 
     this.cpuRunnerService.initialInstructions = instructions;
 

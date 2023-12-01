@@ -1,6 +1,54 @@
-div {
+.instructions{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
   background-color: rgb(223, 223, 223);
-  min-height: 400px;
+  min-height: 590px;
+  width: 300px;
+}
+
+.content{
+  width: 300px;
+  background: aquamarine;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-size: large;
+  font-weight: bold;
+
+}
+
+.line-instruction{
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  align-items: center;
+  font-size: large;
+  font-style: normal;
+}
+
+.bg-line-color{
+  background: aliceblue;
+}
+
+.bg-index-color{
+  background: rgb(223, 223, 223);
+  color: red;
+}
+
+.index{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border: solid;
+  padding: 4px;
+  background: gray;
+  color: antiquewhite;
+  border-color: rgb(223, 223, 223);
 }
 
 .selected {

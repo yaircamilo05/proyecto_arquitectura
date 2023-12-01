@@ -15,15 +15,7 @@ import { PrincipalMemoryService } from '../services/principal-memory.service';
   selector: 'app-principal-memory',
   standalone: true,
   imports: [CommonModule],
-  template: `<div [ngClass]="{ selected: componentIsSelected() }">
-    <ng-content></ng-content>
-
-    <div class="instructions">
-      @for (instruction of instructions(); track $index) {
-      <span>{{ instruction }}</span>
-      }
-    </div>
-  </div>`,
+  templateUrl: './principal-memory.component.html',
   styleUrl: './principal-memory.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -44,5 +36,9 @@ export class PrincipalMemoryComponent extends CpuComponentComponent {
   set initialInstructions(value: string[]) {
     this.instructions.set(value);
     this.principalMemoryService.instructions = value;
+  }
+
+  isImpar(index: number): boolean {
+    return index % 2 !== 0;
   }
 }

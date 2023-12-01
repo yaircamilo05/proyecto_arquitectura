@@ -7,7 +7,7 @@ export class RegistersBankService {
   registersSignal: WritableSignal<{ [key: string]: number }>;
 
   constructor() {
-    const initialRegisters = {
+    let initialRegisters = {
       Ax: 0,
       Bx: 0,
       Cx: 0,

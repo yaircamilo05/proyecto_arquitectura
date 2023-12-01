@@ -5,17 +5,22 @@
   <div class="container">
     <div class="instructions">
       @for (instruction of instructions(); track $index) {
-        <div [ngClass]=" {'bg-line-color': isImpar($index+1)}" class="line-instruction">
-          <span  [ngClass]="{'bg-index-color': isImpar($index+1)}" class="index">{{ $index + 1 }}</span>
-          <span class="content-instruction">{{ instruction }}</span>
-        </div>
+      <div [ngClass]=" {'bg-line-color': isImpar($index+1)}" class="line-instruction">
+        <span [ngClass]="{'bg-index-color': isImpar($index+1)}" class="index">{{ $index + 1 }}</span>
+        <span class="content-instruction">{{ instruction }}</span>
+      </div>
       }
     </div>
     <div class="variables">
-      <div class="variable" *ngFor="let variable of variables(); let i = index">
-        <span class="name">{{ variable.name }}</span>
-        <span class="value">{{ variable.value }}</span>
-      </div>
+      @for (variable of variables(); track $index) {
+        @if(variables().length > 0){
+        <div [ngClass]=" {'bg-line-color': isImpar($index)}"  class="line-instruction">
+          <span [ngClass]="{'bg-index-color': isImpar($index+1)}" class="index">{{ $index + 1 }}</span>
+          <span class="content-instruction">{{ getNameVariable(variable) }}</span>
+          <span class="content-instruction">{{ decimalToBinary(variable) }}</span>
+        </div>
+        }
+      }
     </div>
   </div>
 </div>

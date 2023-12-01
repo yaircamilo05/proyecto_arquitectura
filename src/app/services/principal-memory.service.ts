@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PrincipalMemoryService {
   private _instructions?: string[];
-  private _variables: { [key: string]: number }= {};
-
+  private _variables: [{ [key: string]: number }]= [{}];
+  variables = signal<[{ [key: string]: number }]>([{}]);
   set instructions(values: string[]) {
     this._instructions = values;
   }
@@ -17,11 +17,13 @@ export class PrincipalMemoryService {
 
   addVariable(key: string, value: number) {
     // Add variable to memory
-    this._variables[key] = value;
+    this._variables.push({ [key]: value });
+    this.variables.set(this._variables);
   }
 
   getVariable(key: string): number {
     // Get variable from memory
-    return this._variables[key];
+    const variable = this._variables.find((variable) => variable[key]);
+    return variable ? variable[key] : 0;
   }
 }

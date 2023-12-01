@@ -21,7 +21,7 @@ import { PrincipalMemoryService } from '../services/principal-memory.service';
 })
 export class PrincipalMemoryComponent extends CpuComponentComponent {
   instructions: WritableSignal<string[]>;
-
+  variables: WritableSignal<[{ [key: string]: number }]>;
   constructor(
     cpuRunnerService: CpuRunnerService,
     private principalMemoryService: PrincipalMemoryService
@@ -29,6 +29,7 @@ export class PrincipalMemoryComponent extends CpuComponentComponent {
     super(cpuRunnerService);
 
     this.instructions = signal([]);
+    this.variables = this.principalMemoryService.variables;
     this.identifier = 'PRINCIPAL-MEMORY';
   }
 
@@ -40,5 +41,21 @@ export class PrincipalMemoryComponent extends CpuComponentComponent {
 
   isImpar(index: number): boolean {
     return index % 2 !== 0;
+  }
+
+  getNameVariable(variable: { [key: string]: number }): string {
+    return Object.keys(variable)[0];
+  }
+
+  getValueVariable(variable: { [key: string]: number }): number {
+    return Object.values(variable)[0];
+  }
+
+  decimalToBinary(variable: { [key: string]: number }): string {
+    const value = this.getValueVariable(variable);
+    if(value) {
+      return value.toString(2);
+    }
+    return 'DATOS O VARIABLES';
   }
 }

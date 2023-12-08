@@ -38,20 +38,27 @@ export class AppComponent {
   selectCpuComponent(
     component: CpuComponentType,
     content?: string | number | string[]
-  ) {}
+  ) {
+    if (content) {
+      this.cpuRunnerService.selectComponentWitContent(component, content);
+      return;
+    }
+
+    this.cpuRunnerService.selectComponent(component);
+  }
 
   executeInstructions() {
     const instructionsValue = this.instructionsForm.controls.instructions.value;
     const instructions = instructionsValue.split(';');
     this.cpuRunnerService.initialInstructions = instructions;
-    this.run(instructions)
+    this.run(instructions);
     // Start here
   }
 
   run(instructions: string[]) {
     instructions.forEach((instruction) => {
-      this.cicloCaptacionInstruccion()
-      const line : string []= instruction.trim().replace(' ','').split(',');
+      this.cicloCaptacionInstruccion();
+      const line: string[] = instruction.trim().replace(' ', '').split(',');
       const command = line[0];
       switch (command.toUpperCase()) {
         case 'MOV':
@@ -79,7 +86,6 @@ export class AppComponent {
           break;
       }
     });
-
   }
 
   new(line: string[]) {
@@ -97,12 +103,11 @@ export class AppComponent {
     console.log(value);
   }
 
-
   mov(line: string[]) {
     const keyValue1 = line[1];
     const keyValue2 = line[2];
     //Validar si es un registro o una variable TO DO
-    const value2= this.principalMemoryService.getVariable(keyValue2);
+    const value2 = this.principalMemoryService.getVariable(keyValue2);
     this.principalMemoryService.addVariable(keyValue1, value2);
   }
 
@@ -112,13 +117,12 @@ export class AppComponent {
     //se hace el segundo ciclo de captacion de dato
     const keyValue2 = line[2];
 
-    const value1= this.principalMemoryService.getVariable(keyValue1);
-    const value2= this.principalMemoryService.getVariable(keyValue2);
+    const value1 = this.principalMemoryService.getVariable(keyValue1);
+    const value2 = this.principalMemoryService.getVariable(keyValue2);
 
     const result = value1 + value2;
     //Hacer el ciclo de escritura de dato en memoria
     this.principalMemoryService.addVariable(keyValue1, result);
-
 
     /* const value = line[2];
 
@@ -133,21 +137,75 @@ export class AppComponent {
 
     } */
   }
-//este pinta
-  cicloCaptacionDatoMemoria() {
+  //este pinta
+  async cicloCaptacionDatoMemoria() {
     //Ejecutar ciclo de captacion de dato
     //uc, bc, memory, uc, pc, mar, bd, memory, bd, mbr, alu
+    const components: CpuComponentType[] = [
+      'CONTROL-BUS',
+      'PRINCIPAL-MEMORY',
+      'UC',
+      'PC',
+      'MAR',
+      'DIRECTIONS-BUS',
+      'PRINCIPAL-MEMORY',
+      'DATA-BUS',
+      'MBR',
+      'ALU',
+    ];
+
+    if (this.cpuRunnerService.selectedCpuComponent.value !== 'UC') {
+      this.selectCpuComponent('UC');
+    }
+
+    for (const component of components) {
+      await this.selectCpuComponentTime(component);
+    }
   }
 
-
-  cicloCaptacionDatoBR() {
+  async cicloCaptacionDatoBR() {
     //Ejecutar ciclo de captacion de dato del banco de registros
     //uc, BancoR, alu
+    const components: CpuComponentType[] = ['REGISTERS-BANK', 'ALU'];
+
+    if (this.cpuRunnerService.selectedCpuComponent.value !== 'UC') {
+      this.selectCpuComponent('UC');
+    }
+
+    for (const component of components) {
+      await this.selectCpuComponentTime(component);
+    }
   }
 
-  cicloCaptacionInstruccion() {
-      //Ejecutar ciclo de captacion de instruccion
-      //uc, bc, memory, uc, pc, mar, bd, memory, bd, mbr, ir
+  async cicloCaptacionInstruccion() {
+    //Ejecutar ciclo de captacion de instruccion
+    //uc, bc, memory, uc, pc, mar, bd, memory, bd, mbr, ir
+
+    const components: CpuComponentType[] = [
+      'CONTROL-BUS',
+      'PRINCIPAL-MEMORY',
+      'UC',
+      'PC',
+      'MAR',
+      'DIRECTIONS-BUS',
+      'PRINCIPAL-MEMORY',
+      'DATA-BUS',
+      'IR',
+      'UC',
+    ];
+
+    this.selectCpuComponent('UC');
+    for (const component of components) {
+      await this.selectCpuComponentTime(component);
+    }
   }
 
+  selectCpuComponentTime(component: CpuComponentType) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        this.cpuRunnerService.selectComponent(component);
+        resolve(true);
+      }, 2000);
+    });
+  }
 }

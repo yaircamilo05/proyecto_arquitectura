@@ -16,9 +16,19 @@ export class PrincipalMemoryService {
   }
 
   addVariable(key: string, value: number) {
-    // Add variable to memory
-    this._variables.push({ [key]: value });
+    // Find variable in memory
+    let variable = this._variables.find((variable) => variable[key] !== undefined);
+  
+    if (variable) {
+      // If variable exists, update its value
+      variable[key] = value;
+    } else {
+      // If variable does not exist, add it to memory
+      this._variables.push({ [key]: value });
+    }
+  
     this.variables.set(this._variables);
+    console.log(this._variables);
   }
 
   getVariable(key: string): number {

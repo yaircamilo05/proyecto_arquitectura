@@ -38,15 +38,21 @@ export class RegistersBankService {
   popRegisterValue(key: string) {
     const registers = this.registersSignal();
 
-    if (registers[key] === null && registers[key] === undefined) {
+    if (registers[key] === null || registers[key] === undefined) {
       return;
     }
 
     const value = registers[key];
-
     registers[key] = 0;
     this.registersSignal.set({ ...registers });
 
     return value;
   }
+
+  getRegisterValue(){
+    const registers = this.registersSignal();
+    console.log(registers);
+    return registers; 
+  }
+
 }

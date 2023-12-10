@@ -57,7 +57,7 @@ export class AppComponent {
 
   run(instructions: string[]) {
     instructions.forEach((instruction) => {
-      this.cicloCaptacionInstruccion();
+       this.cicloCaptacionInstruccion();
       const line: string[] = instruction.trim().replace(' ', '').split(',');
       const command = line[0];
       switch (command.toUpperCase()) {
@@ -68,13 +68,13 @@ export class AppComponent {
           this.add(line);
           break;
         case 'SUB':
-          //this.sub(line);
+          this.sub(line);
           break;
         case 'MUL':
-          //this.cmp(line);
+          this.mul(line);
           break;
         case 'DIV':
-          //this.jmp(line);
+          this.div(line);
           break;
         case 'NEW':
           this.new(line);
@@ -100,6 +100,8 @@ export class AppComponent {
     //ciclo de impresion en pantalla
     const keyValue1 = line[1];
     const value = this.principalMemoryService.getVariable(keyValue1);
+
+    //lucho le hace falta hacer la impresion en pantalla
     console.log(value);
   }
 
@@ -117,25 +119,56 @@ export class AppComponent {
     //se hace el segundo ciclo de captacion de dato
     const keyValue2 = line[2];
 
-    const value1 = this.principalMemoryService.getVariable(keyValue1);
-    const value2 = this.principalMemoryService.getVariable(keyValue2);
+    const value1 = this.buscarVariable(keyValue1);
+    const value2 = this.buscarVariable(keyValue2);
 
     const result = value1 + value2;
     //Hacer el ciclo de escritura de dato en memoria
-    this.principalMemoryService.addVariable(keyValue1, result);
+    console.log(result);
+    this.guardarVariable(keyValue1, result);
+    console.log(this.principalMemoryService.getVariable(keyValue1));
+  }
 
-    /* const value = line[2];
+  sub(line: string[]) {
+    const keyValue1 = line[1];
+    //se hace el segundo ciclo de captacion de dato
+    const keyValue2 = line[2];
 
+    const value1 = this.buscarVariable(keyValue1);
 
+    const value2 = this.buscarVariable(keyValue2);
 
-    const dataRegister = this.registersBankService.popRegisterValue(line[1]);
-    if (dataRegister !== null && dataRegister !== undefined) {
-      const result = dataRegister + parseInt(value);
-      this.registersBankService.addValueToRegister(line[1], result);
-    }
-    else{
+    const result = value1 - value2;
+    //Hacer el ciclo de escritura de dato en memoria
+    this.guardarVariable(keyValue1, result);
+  }
 
-    } */
+  mul(line: string[]) {
+    const keyValue1 = line[1];
+    //se hace el segundo ciclo de captacion de dato
+    const keyValue2 = line[2];
+
+    const value1 = this.buscarVariable(keyValue1);
+
+    const value2 = this.buscarVariable(keyValue2);
+
+    const result = value1 * value2;
+    //Hacer el ciclo de escritura de dato en memoria
+    this.guardarVariable(keyValue1, result);
+  }
+
+  div(line: string[]) {
+    const keyValue1 = line[1];
+    //se hace el segundo ciclo de captacion de dato
+    const keyValue2 = line[2];
+
+    const value1 = this.buscarVariable(keyValue1);
+
+    const value2 = this.buscarVariable(keyValue2);
+
+    const result = value1 / value2;
+    //Hacer el ciclo de escritura de dato en memoria
+    this.guardarVariable(keyValue1, result);
   }
   //este pinta
   async cicloCaptacionDatoMemoria() {
@@ -177,7 +210,7 @@ export class AppComponent {
     }
   }
 
-  async cicloCaptacionInstruccion() {
+  cicloCaptacionInstruccion() {
     //Ejecutar ciclo de captacion de instruccion
     //uc, bc, memory, uc, pc, mar, bd, memory, bd, mbr, ir
 
@@ -196,7 +229,7 @@ export class AppComponent {
 
     this.selectCpuComponent('UC');
     for (const component of components) {
-      await this.selectCpuComponentTime(component);
+      this.selectCpuComponentTime(component);
     }
   }
 
@@ -207,5 +240,34 @@ export class AppComponent {
         resolve(true);
       }, 2000);
     });
+  }
+
+  buscarVariable(key: string) {
+    const value = this.registersBankService.popRegisterValue(key);
+    if (value !== null && value !== undefined) {
+      this.cicloCaptacionDatoBR();
+      return value;
+    } else {
+      this.cicloCaptacionDatoMemoria();
+      return this.principalMemoryService.getVariable(key);
+    }
+  }
+
+  guardarVariable(key: string, value: number) {
+    
+    const valueBr = this.registersBankService.popRegisterValue(key);
+    console.log(valueBr, 'valor del banco de registros');
+    if (valueBr !== null && valueBr !== undefined) {
+      this.registersBankService.addValueToRegister(key, value);
+      //aqui se pinta como se guarda en el banco de registros
+
+      return
+    } else {
+      this.principalMemoryService.addVariable(key, value);
+      console.log(this.principalMemoryService.getVariable(key), 'memoria');
+      //aqui se pinta como se guarda en la memoria
+      return      
+    }
+    
   }
 }

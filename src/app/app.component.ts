@@ -55,9 +55,9 @@ export class AppComponent {
     // Start here
   }
 
-  run(instructions: string[]) {
-    instructions.forEach((instruction) => {
-       this.cicloCaptacionInstruccion();
+  async run(instructions: string[]) {
+    for (const instruction of instructions) {
+      await this.cicloCaptacionInstruccion();
       const line: string[] = instruction.trim().replace(' ', '').split(',');
       const command = line[0];
       switch (command.toUpperCase()) {
@@ -85,7 +85,8 @@ export class AppComponent {
         default:
           break;
       }
-    });
+    }
+    instructions.forEach((instruction) => {});
   }
 
   new(line: string[]) {
@@ -113,14 +114,14 @@ export class AppComponent {
     this.principalMemoryService.addVariable(keyValue1, value2);
   }
 
-  add(line: string[]) {
+  async add(line: string[]) {
     //se hace el primer ciclo de captacion de dato
     const keyValue1 = line[1];
     //se hace el segundo ciclo de captacion de dato
     const keyValue2 = line[2];
 
-    const value1 = this.buscarVariable(keyValue1);
-    const value2 = this.buscarVariable(keyValue2);
+    const value1 = await this.buscarVariable(keyValue1);
+    const value2 = await this.buscarVariable(keyValue2);
 
     const result = value1 + value2;
     //Hacer el ciclo de escritura de dato en memoria
@@ -129,42 +130,42 @@ export class AppComponent {
     console.log(this.principalMemoryService.getVariable(keyValue1));
   }
 
-  sub(line: string[]) {
+  async sub(line: string[]) {
     const keyValue1 = line[1];
     //se hace el segundo ciclo de captacion de dato
     const keyValue2 = line[2];
 
-    const value1 = this.buscarVariable(keyValue1);
+    const value1 = await this.buscarVariable(keyValue1);
 
-    const value2 = this.buscarVariable(keyValue2);
+    const value2 = await this.buscarVariable(keyValue2);
 
     const result = value1 - value2;
     //Hacer el ciclo de escritura de dato en memoria
     this.guardarVariable(keyValue1, result);
   }
 
-  mul(line: string[]) {
+  async mul(line: string[]) {
     const keyValue1 = line[1];
     //se hace el segundo ciclo de captacion de dato
     const keyValue2 = line[2];
 
-    const value1 = this.buscarVariable(keyValue1);
+    const value1 = await this.buscarVariable(keyValue1);
 
-    const value2 = this.buscarVariable(keyValue2);
+    const value2 = await this.buscarVariable(keyValue2);
 
     const result = value1 * value2;
     //Hacer el ciclo de escritura de dato en memoria
     this.guardarVariable(keyValue1, result);
   }
 
-  div(line: string[]) {
+  async div(line: string[]) {
     const keyValue1 = line[1];
     //se hace el segundo ciclo de captacion de dato
     const keyValue2 = line[2];
 
-    const value1 = this.buscarVariable(keyValue1);
+    const value1 = await this.buscarVariable(keyValue1);
 
-    const value2 = this.buscarVariable(keyValue2);
+    const value2 = await this.buscarVariable(keyValue2);
 
     const result = value1 / value2;
     //Hacer el ciclo de escritura de dato en memoria
@@ -210,7 +211,7 @@ export class AppComponent {
     }
   }
 
-  cicloCaptacionInstruccion() {
+  async cicloCaptacionInstruccion() {
     //Ejecutar ciclo de captacion de instruccion
     //uc, bc, memory, uc, pc, mar, bd, memory, bd, mbr, ir
 
@@ -229,7 +230,7 @@ export class AppComponent {
 
     this.selectCpuComponent('UC');
     for (const component of components) {
-      this.selectCpuComponentTime(component);
+      await this.selectCpuComponentTime(component);
     }
   }
 
@@ -242,32 +243,30 @@ export class AppComponent {
     });
   }
 
-  buscarVariable(key: string) {
+  async buscarVariable(key: string) {
     const value = this.registersBankService.popRegisterValue(key);
     if (value !== null && value !== undefined) {
-      this.cicloCaptacionDatoBR();
+      await this.cicloCaptacionDatoBR();
       return value;
     } else {
-      this.cicloCaptacionDatoMemoria();
+      await this.cicloCaptacionDatoMemoria();
       return this.principalMemoryService.getVariable(key);
     }
   }
 
   guardarVariable(key: string, value: number) {
-    
     const valueBr = this.registersBankService.popRegisterValue(key);
     console.log(valueBr, 'valor del banco de registros');
     if (valueBr !== null && valueBr !== undefined) {
       this.registersBankService.addValueToRegister(key, value);
       //aqui se pinta como se guarda en el banco de registros
 
-      return
+      return;
     } else {
       this.principalMemoryService.addVariable(key, value);
       console.log(this.principalMemoryService.getVariable(key), 'memoria');
       //aqui se pinta como se guarda en la memoria
-      return      
+      return;
     }
-    
   }
 }

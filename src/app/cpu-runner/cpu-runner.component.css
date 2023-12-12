@@ -16,8 +16,8 @@ main {
   grid-template:
     "PC PC MAR MAR"
     "PC PC MAR MAR"
-    "N  N  UC  UC"
-    "N  N  UC  UC"
+    "AL AL UC  UC"
+    "AL AL UC  UC"
     "IR IR MBR MBR"
     "IR IR MBR MBR"
     "RB RB RB  RB"
@@ -33,18 +33,22 @@ main {
 }
 
 .cpu-section .component:nth-child(3) {
-  grid-area: UC;
+  grid-area: AL;
 }
 
 .cpu-section .component:nth-child(4) {
-  grid-area: IR;
+  grid-area: UC;
 }
 
 .cpu-section .component:nth-child(5) {
-  grid-area: MBR;
+  grid-area: IR;
 }
 
 .cpu-section .component:nth-child(6) {
+  grid-area: MBR;
+}
+
+.cpu-section .component:nth-child(7) {
   grid-area: RB;
 }
 

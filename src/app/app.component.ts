@@ -230,13 +230,26 @@ export class AppComponent {
 
     this.selectCpuComponent('UC');
     for (const component of components) {
+      if (component === 'PC' || component === 'MAR') {
+        await this.selectCpuComponentTime(component, 1);
+        continue;
+      }
+
       await this.selectCpuComponentTime(component);
     }
   }
 
-  selectCpuComponentTime(component: CpuComponentType) {
+  selectCpuComponentTime(
+    component: CpuComponentType,
+    content?: string | number
+  ) {
     return new Promise((resolve) => {
       setTimeout(() => {
+        if (content) {
+          this.cpuRunnerService.selectComponentWitContent(component, content);
+          resolve(true);
+        }
+
         this.cpuRunnerService.selectComponent(component);
         resolve(true);
       }, 2000);

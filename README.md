@@ -2,6 +2,17 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.6.
 
+primero necesita node
+para poder ejecutarlo primero necesita angular que se consigue con el siguiente comando en terminal
+npm install -g @angular/cli
+
+y luego para todo el resto de librerias
+
+npm i 
+
+
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.

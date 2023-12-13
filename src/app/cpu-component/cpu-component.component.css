@@ -1,15 +1,30 @@
 .cpu-component {
-  border: 1px solid red;
+  border: 3px solid black;
+  border-radius: 20px;
+  background-color: white;
   display: flex;
   padding: 30px 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
+  transition: all 0.3s ease-in-out;
 }
 
 .cpu-component.selected {
-  border: 2px solid blue;
-  transform: scale(1.05);
+  border: 3px solid rgba(0, 255, 229, 0.801);
   box-shadow: 0 4px 15px 0 hsla(0, 0%, 0%, 0.2);
+}
+
+.bus {
+  border: 0;
+  border-radius: 0;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+}
+
+.bus.selected {
+  border: 0;
+  border-top: 2px solid rgba(0, 255, 229, 0.801);
+  border-bottom: 2px solid rgba(0, 255, 229, 0.801);
 }

@@ -10,7 +10,16 @@ textarea {
   width: 100%;
 }
 
-.levantar{
+.levantar {
   transform: scale(1.05);
   box-shadow: 0 4px 15px 0 hsla(0, 0%, 0%, 0.2);
+}
+
+.actual-cycle {
+  font-size: 20px;
+  padding-bottom: 0;
+  margin: 0 auto;
+  text-align: center;
+  font-weight: bold;
+  width: auto;
 }

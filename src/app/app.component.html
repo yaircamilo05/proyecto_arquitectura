@@ -4,6 +4,8 @@
     <p-button type="submit">Ejecutar ordenes</p-button>
   </form>
 
-  <div>Ciclo actual: {{ cicloActual() }}</div>
-  <app-cpu-runner></app-cpu-runner>
+  <div class="cpu-container">
+    <div class="actual-cycle">Ciclo actual: {{ cicloActual() }}</div>
+    <app-cpu-runner></app-cpu-runner>
+  </div>
 </div>

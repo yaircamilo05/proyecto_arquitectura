@@ -1,4 +1,10 @@
-<div class="cpu-component" [ngClass]="{ selected: componentIsSelected() }">
+<div
+  class="cpu-component"
+  [ngClass]="{
+    selected: componentIsSelected(),
+    bus: isBus()
+  }"
+>
   <ng-content></ng-content>
 
   @if (content() !== null) {

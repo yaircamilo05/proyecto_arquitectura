@@ -116,9 +116,8 @@ export class AppComponent {
   async mov(line: string[]) {
     const keyValue1 = line[1];
     const keyValue2 = line[2];
-    //Validar si es un registro o una variable TO DO
-    const value2 = this.principalMemoryService.getVariable(keyValue2);
 
+    const value2 = await this.buscarVariable(keyValue2);
     await this.guardarVariable(keyValue1, value2);
   }
 
@@ -212,10 +211,8 @@ export class AppComponent {
   }
 
   async cicloCaptacionDatoBR() {
-    //Ejecutar ciclo de captacion de dato del banco de registros
-    //uc, BancoR, alu
     this.cicloActual.set('Ciclo captación de dato en banco de registros');
-    const components: CpuComponentType[] = ['REGISTERS-BANK', 'ALU'];
+    const components: CpuComponentType[] = ['REGISTERS-BANK', 'UC'];
 
     if (this.cpuRunnerService.selectedCpuComponent.value !== 'UC') {
       this.selectCpuComponent('UC');
@@ -230,10 +227,6 @@ export class AppComponent {
 
   async cicloCaptacionInstruccion() {
     this.cicloActual.set('Ciclo captación de instrucción');
-
-    //Ejecutar ciclo de captacion de instruccion
-    //uc, bc, memory, uc, pc, mar, bd, memory, bd, mbr, ir
-
     const components: CpuComponentType[] = [
       'CONTROL-BUS',
       'PRINCIPAL-MEMORY',
@@ -284,6 +277,19 @@ export class AppComponent {
     this.cicloActual.set('');
   }
 
+  async cicloGuardadoEnBr() {
+    this.cicloActual.set('Ciclo guardado de dato en banco de registros');
+
+    const components: CpuComponentType[] = ['REGISTERS-BANK', 'UC'];
+
+    this.selectCpuComponent('UC');
+    for (const component of components) {
+      await this.selectCpuComponentTime(component);
+    }
+
+    this.cicloActual.set('');
+  }
+
   async pintarOperacion(contenido: string) {
     const components: CpuComponentType[] = ['ALU', 'UC'];
 
@@ -297,7 +303,7 @@ export class AppComponent {
       await this.selectCpuComponentTime(component);
     }
 
-    this.cicloActual.set('Realizando operación en ALU');
+    this.cicloActual.set('');
   }
 
   selectCpuComponentTime(
@@ -330,17 +336,13 @@ export class AppComponent {
 
   async guardarVariable(key: string, value: number) {
     const valueBr = this.registersBankService.popRegisterValue(key);
-    console.log(valueBr, 'valor del banco de registros');
     if (valueBr !== null && valueBr !== undefined) {
+      await this.cicloGuardadoEnBr();
       this.registersBankService.addValueToRegister(key, value);
-      //aqui se pinta como se guarda en el banco de registros
-
-      return;
-    } else {
-      await this.cicloGuardadoEnMemoria();
-      this.principalMemoryService.addVariable(key, value);
-      //aqui se pinta como se guarda en la memoria
       return;
     }
+
+    await this.cicloGuardadoEnMemoria();
+    this.principalMemoryService.addVariable(key, value);
   }
 }

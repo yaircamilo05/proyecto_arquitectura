@@ -1,9 +1,17 @@
 section {
   display: flex;
   justify-content: space-evenly;
-  border: 1px solid red;
+  border: 3px solid black;
+  background-color: white;
+  border-radius: 20px;
   align-items: center;
   padding: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+.selected {
+  border: 3px solid rgba(0, 255, 229, 0.801);
+  box-shadow: 0 4px 15px 0 hsla(0, 0%, 0%, 0.2);
 }
 
 .registers {

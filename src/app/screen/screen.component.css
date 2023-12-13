@@ -1,8 +1,13 @@
 div {
-  width: 100%;
-  padding: 10px;
+  width: 80%;
+  margin: 0 auto;
+  border-radius: 50px;
+  background-color: rgb(181, 252, 242);
+  padding: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 10px solid red;
+  border: 5px solid black;
+  font-size: 24px;
+  font-weight: bold;
 }

@@ -25,7 +25,6 @@ export class RegistersBankComponent extends CpuComponentComponent {
     private registersBankService: RegistersBankService
   ) {
     super(cpuRunnerService);
-
     this.identifier = 'REGISTERS-BANK';
   }
 

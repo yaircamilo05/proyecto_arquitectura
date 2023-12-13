@@ -1,5 +1,5 @@
 <section>
-  <div class="registers">
+  <div class="registers" [ngClass]="{ selected: componentIsSelected() }">
     @for (register of registers() | keyvalue; track $index) {
     <span>{{ register.key }}: {{ register.value }}</span>
     }

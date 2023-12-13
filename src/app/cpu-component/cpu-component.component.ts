@@ -75,6 +75,14 @@ export class CpuComponentComponent implements OnInit, OnDestroy {
     this.cpuRunnerService.resetContent();
   }
 
+  isBus() {
+    return (
+      this.identifier === 'CONTROL-BUS' ||
+      this.identifier === 'DATA-BUS' ||
+      this.identifier === 'DIRECTIONS-BUS'
+    );
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }

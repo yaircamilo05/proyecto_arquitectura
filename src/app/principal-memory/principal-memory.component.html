@@ -1,26 +1,42 @@
-<div [ngClass]="{ selected: componentIsSelected() }">
+<div
+  [ngClass]="{ selected: componentIsSelected() }"
+  class="principal-memory-container"
+>
   <div class="content">
     <ng-content></ng-content>
   </div>
   <div class="container">
     <div class="instructions">
       @for (instruction of instructions(); track $index) {
-      <div [ngClass]=" {'bg-line-color': isImpar($index+1)}" class="line-instruction">
-        <span [ngClass]="{'bg-index-color': isImpar($index+1)}" class="index">{{ $index + 1 }}</span>
+      <div
+        [ngClass]="{ 'bg-line-color': isImpar($index + 1) }"
+        class="line-instruction"
+      >
+        <span
+          [ngClass]="{ 'bg-index-color': isImpar($index + 1) }"
+          class="index"
+          >{{ $index + 1 }}</span
+        >
         <span class="content-instruction">{{ instruction }}</span>
       </div>
       }
     </div>
     <div class="variables">
-      @for (variable of variables(); track $index) {
-        @if(variables().length > 0){
-        <div [ngClass]=" {'bg-line-color': isImpar($index)}"  class="line-instruction">
-          <span [ngClass]="{'bg-index-color': isImpar($index+1)}" class="index">{{ $index + 1 }}</span>
-          <span class="content-instruction">{{ getNameVariable(variable) }}</span>
-          <span class="content-instruction">{{ decimalToBinary(variable) }}</span>
-        </div>
-        }
-      }
+      @for (variable of variables(); track $index) { @if(variables().length >
+      0){
+      <div
+        [ngClass]="{ 'bg-line-color': isImpar($index) }"
+        class="line-instruction"
+      >
+        <span
+          [ngClass]="{ 'bg-index-color': isImpar($index + 1) }"
+          class="index"
+          >{{ $index + 1 }}</span
+        >
+        <span class="content-instruction">{{ getNameVariable(variable) }}</span>
+        <span class="content-instruction">{{ decimalToBinary(variable) }}</span>
+      </div>
+      } }
     </div>
   </div>
 </div>

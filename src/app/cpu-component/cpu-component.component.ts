@@ -5,10 +5,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Signal,
   WritableSignal,
-  computed,
-  effect,
   signal,
 } from '@angular/core';
 import { CpuRunnerService } from '../services/cpu-runner.service';
@@ -44,7 +41,7 @@ export class CpuComponentComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.identifier === 'PC' || this.identifier === 'MAR') {
-      this.content.set(1);
+      this.content.set(0);
     }
 
     const selectedCpuComponentSub =

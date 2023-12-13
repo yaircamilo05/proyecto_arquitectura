@@ -9,6 +9,7 @@ import { CpuRunnerComponent } from './cpu-runner/cpu-runner.component';
 import { ButtonModule } from 'primeng/button';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ScreenComponent } from './screen/screen.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,6 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     InputTextareaModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    ScreenComponent,
     CpuRunnerComponent,
   ],
   providers: [],

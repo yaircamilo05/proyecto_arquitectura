@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CpuRunnerService } from './services/cpu-runner.service';
 import { CpuComponentType } from './types/cpu-component.type';
 import { PrincipalMemoryService } from './services/principal-memory.service';
@@ -9,6 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { RegistersBankService } from './services/registers-bank.service';
+import { ScreenService } from './services/screen.service';
 
 interface InstructionsForm {
   instructions: FormControl<string>;
@@ -21,10 +22,13 @@ interface InstructionsForm {
 export class AppComponent {
   instructionsForm: FormGroup<InstructionsForm>;
 
+  cicloActual = signal<string>('');
+
   constructor(
     private cpuRunnerService: CpuRunnerService,
     private principalMemoryService: PrincipalMemoryService,
     private registersBankService: RegistersBankService,
+    private screenService: ScreenService,
     private fb: FormBuilder
   ) {
     this.instructionsForm = new FormGroup({
@@ -62,25 +66,25 @@ export class AppComponent {
       const command = line[0];
       switch (command.toUpperCase()) {
         case 'MOV':
-          this.mov(line);
+          await this.mov(line);
           break;
         case 'ADD':
-          this.add(line);
+          await this.add(line);
           break;
         case 'SUB':
-          this.sub(line);
+          await this.sub(line);
           break;
         case 'MUL':
-          this.mul(line);
+          await this.mul(line);
           break;
         case 'DIV':
-          this.div(line);
+          await this.div(line);
           break;
         case 'NEW':
-          this.new(line);
+          await this.new(line);
           break;
         case 'PRINT':
-          this.print(line);
+          await this.print(line);
           break;
         default:
           break;
@@ -89,29 +93,33 @@ export class AppComponent {
     instructions.forEach((instruction) => {});
   }
 
-  new(line: string[]) {
+  async new(line: string[]) {
     //ciclo de creacion de variable en memoria
     // UC, BC, Memory, UC, BDir, BD
     const key = line[1];
     const value = line[2];
+
+    await this.cicloGuardadoEnMemoria();
+
     this.principalMemoryService.addVariable(key, parseInt(value));
   }
 
-  print(line: string[]) {
+  async print(line: string[]) {
     //ciclo de impresion en pantalla
     const keyValue1 = line[1];
-    const value = this.principalMemoryService.getVariable(keyValue1);
 
-    //lucho le hace falta hacer la impresion en pantalla
-    console.log(value);
+    const value = await this.buscarVariable(keyValue1);
+
+    this.screenService.setScreenContent(value.toString());
   }
 
-  mov(line: string[]) {
+  async mov(line: string[]) {
     const keyValue1 = line[1];
     const keyValue2 = line[2];
     //Validar si es un registro o una variable TO DO
     const value2 = this.principalMemoryService.getVariable(keyValue2);
-    this.principalMemoryService.addVariable(keyValue1, value2);
+
+    await this.guardarVariable(keyValue1, value2);
   }
 
   async add(line: string[]) {
@@ -126,6 +134,7 @@ export class AppComponent {
     const result = value1 + value2;
     //Hacer el ciclo de escritura de dato en memoria
     console.log(result);
+    await this.pintarOperacion(`${keyValue1} + ${keyValue2}`);
     this.guardarVariable(keyValue1, result);
     console.log(this.principalMemoryService.getVariable(keyValue1));
   }
@@ -140,6 +149,8 @@ export class AppComponent {
     const value2 = await this.buscarVariable(keyValue2);
 
     const result = value1 - value2;
+    await this.pintarOperacion(`${keyValue1} - ${keyValue2}`);
+
     //Hacer el ciclo de escritura de dato en memoria
     this.guardarVariable(keyValue1, result);
   }
@@ -154,6 +165,8 @@ export class AppComponent {
     const value2 = await this.buscarVariable(keyValue2);
 
     const result = value1 * value2;
+    await this.pintarOperacion(`${keyValue1} X ${keyValue2}`);
+
     //Hacer el ciclo de escritura de dato en memoria
     this.guardarVariable(keyValue1, result);
   }
@@ -164,10 +177,11 @@ export class AppComponent {
     const keyValue2 = line[2];
 
     const value1 = await this.buscarVariable(keyValue1);
-
     const value2 = await this.buscarVariable(keyValue2);
 
     const result = value1 / value2;
+    await this.pintarOperacion(`${keyValue1} / ${keyValue2}`);
+
     //Hacer el ciclo de escritura de dato en memoria
     this.guardarVariable(keyValue1, result);
   }
@@ -175,31 +189,32 @@ export class AppComponent {
   async cicloCaptacionDatoMemoria() {
     //Ejecutar ciclo de captacion de dato
     //uc, bc, memory, uc, pc, mar, bd, memory, bd, mbr, alu
+    this.cicloActual.set('Ciclo captación de dato de memoria');
     const components: CpuComponentType[] = [
       'CONTROL-BUS',
       'PRINCIPAL-MEMORY',
       'UC',
-      'PC',
-      'MAR',
       'DIRECTIONS-BUS',
       'PRINCIPAL-MEMORY',
       'DATA-BUS',
       'MBR',
-      'ALU',
+      'UC',
     ];
 
     if (this.cpuRunnerService.selectedCpuComponent.value !== 'UC') {
       this.selectCpuComponent('UC');
     }
-
     for (const component of components) {
       await this.selectCpuComponentTime(component);
     }
+
+    this.cicloActual.set('');
   }
 
   async cicloCaptacionDatoBR() {
     //Ejecutar ciclo de captacion de dato del banco de registros
     //uc, BancoR, alu
+    this.cicloActual.set('Ciclo captación de dato en banco de registros');
     const components: CpuComponentType[] = ['REGISTERS-BANK', 'ALU'];
 
     if (this.cpuRunnerService.selectedCpuComponent.value !== 'UC') {
@@ -209,9 +224,13 @@ export class AppComponent {
     for (const component of components) {
       await this.selectCpuComponentTime(component);
     }
+
+    this.cicloActual.set('Ciclo captación de dato en banco de registros');
   }
 
   async cicloCaptacionInstruccion() {
+    this.cicloActual.set('Ciclo captación de instrucción');
+
     //Ejecutar ciclo de captacion de instruccion
     //uc, bc, memory, uc, pc, mar, bd, memory, bd, mbr, ir
 
@@ -223,7 +242,7 @@ export class AppComponent {
       'MAR',
       'DIRECTIONS-BUS',
       'PRINCIPAL-MEMORY',
-      'DATA-BUS',
+      'DIRECTIONS-BUS',
       'IR',
       'UC',
     ];
@@ -237,12 +256,54 @@ export class AppComponent {
 
       await this.selectCpuComponentTime(component);
     }
+
+    this.cicloActual.set('');
+  }
+
+  async cicloGuardadoEnMemoria() {
+    this.cicloActual.set('Ciclo guardado de dato en memoria principal');
+    //Ejecutar ciclo de captacion de instruccion
+    //uc, bc, memory, uc, pc, mar, bd, memory, bd, mbr, ir
+
+    const components: CpuComponentType[] = [
+      'CONTROL-BUS',
+      'PRINCIPAL-MEMORY',
+      'UC',
+      'DIRECTIONS-BUS',
+      'PRINCIPAL-MEMORY',
+      'UC',
+      'DATA-BUS',
+      'PRINCIPAL-MEMORY',
+    ];
+
+    this.selectCpuComponent('UC');
+    for (const component of components) {
+      await this.selectCpuComponentTime(component);
+    }
+
+    this.cicloActual.set('');
+  }
+
+  async pintarOperacion(contenido: string) {
+    const components: CpuComponentType[] = ['ALU', 'UC'];
+
+    for (const component of components) {
+      if (component === 'ALU') {
+        this.cicloActual.set('Realizando operación en ALU');
+        await this.selectCpuComponentTime(component, contenido);
+        continue;
+      }
+
+      await this.selectCpuComponentTime(component);
+    }
+
+    this.cicloActual.set('Realizando operación en ALU');
   }
 
   selectCpuComponentTime(
     component: CpuComponentType,
     content?: string | number
-  ) {
+  ): Promise<boolean> {
     return new Promise((resolve) => {
       setTimeout(() => {
         if (content) {
@@ -252,7 +313,7 @@ export class AppComponent {
 
         this.cpuRunnerService.selectComponent(component);
         resolve(true);
-      }, 2000);
+      }, 1000);
     });
   }
 
@@ -267,7 +328,7 @@ export class AppComponent {
     }
   }
 
-  guardarVariable(key: string, value: number) {
+  async guardarVariable(key: string, value: number) {
     const valueBr = this.registersBankService.popRegisterValue(key);
     console.log(valueBr, 'valor del banco de registros');
     if (valueBr !== null && valueBr !== undefined) {
@@ -276,8 +337,8 @@ export class AppComponent {
 
       return;
     } else {
+      await this.cicloGuardadoEnMemoria();
       this.principalMemoryService.addVariable(key, value);
-      console.log(this.principalMemoryService.getVariable(key), 'memoria');
       //aqui se pinta como se guarda en la memoria
       return;
     }

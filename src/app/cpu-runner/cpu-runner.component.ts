@@ -11,19 +11,22 @@ import { CpuComponentComponent } from '../cpu-component/cpu-component.component'
 import { PrincipalMemoryComponent } from '../principal-memory/principal-memory.component';
 import { RegistersBankComponent } from '../registers-bank/registers-bank.component';
 import { Subscription } from 'rxjs';
+import { ScreenComponent } from '../screen/screen.component';
 
 @Component({
   selector: 'app-cpu-runner',
   standalone: true,
+  templateUrl: './cpu-runner.component.html',
+  styleUrls: ['./cpu-runner.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     CpuComponentComponent,
     PrincipalMemoryComponent,
     RegistersBankComponent,
+    ScreenComponent,
+    ScreenComponent,
   ],
-  templateUrl: './cpu-runner.component.html',
-  styleUrls: ['./cpu-runner.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CpuRunnerComponent implements OnDestroy {
   instructions = signal<string[]>([]);

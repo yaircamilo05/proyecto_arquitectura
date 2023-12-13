@@ -21,7 +21,7 @@ import { PrincipalMemoryService } from '../services/principal-memory.service';
 })
 export class PrincipalMemoryComponent extends CpuComponentComponent {
   instructions: WritableSignal<string[]>;
-  variables: WritableSignal<[{ [key: string]: number }]>;
+  variables: WritableSignal<{ [key: string]: number }[]>;
   constructor(
     cpuRunnerService: CpuRunnerService,
     private principalMemoryService: PrincipalMemoryService
@@ -53,9 +53,11 @@ export class PrincipalMemoryComponent extends CpuComponentComponent {
 
   decimalToBinary(variable: { [key: string]: number }): string {
     const value = this.getValueVariable(variable);
-    if(value) {
-      return value.toString(2);
+
+    if (!value) {
+      return '0000';
     }
-    return 'DATOS O VARIABLES';
+
+    return value.toString(2);
   }
 }
